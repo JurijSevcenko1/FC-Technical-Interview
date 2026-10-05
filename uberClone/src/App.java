@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Collections;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -20,7 +21,7 @@ public class App {
         // Print the list of cars
         for (Car car : carList) {
             System.out.println("Car ID: " + car.getID() + ", Max Passengers: " + car.getMaxPassengers()
-                    + ", Is Sharable: " + car.isIsSharable() + ", Is Available: " + car.isIsAvailable());
+                    + ", Is Sharable: " + car.isSharable() + ", Is Available: " + car.isAvailable());
         }
 
         // Take a Booking request - Attain user input with input validation
@@ -52,10 +53,10 @@ public class App {
                 System.out.println("Please provide your answer as a single character 'y' or 'n'.");
             }
         }
-        bookCar(passengers, isSharing);
+        bookCar(passengers, isSharing, carList);
     }
 
-    static void bookCar(int passengers, boolean sharing) {
+    static void bookCar(int passengers, boolean sharing, List<Car> cars) {
         // Process user input and find a suitable car from the list of cars
         try {
             // Check whether input number of passengers is less than or equal to 6 - if not
@@ -66,6 +67,25 @@ public class App {
             }
         } catch (Exception e) {
             System.out.print(e.getMessage());
+        }
+
+        List<Car> availableCars = new ArrayList<>();
+        for (Car c : cars) {
+            if ((c.isAvailable() == true) &&
+                    ((sharing) || (!sharing && c.isSharable() == false)) &&
+                    (c.getMaxPassengers() - c.getCurrentPassengers() >= passengers)) {
+                availableCars.add(c);
+            }
+        }
+
+        System.out.println("Original List");
+        for (Car c : availableCars) {
+            System.out.println(c.getMaxPassengers() + " " + c.isSharable());
+        }
+        Collections.sort(availableCars, (c1, c2) -> Integer.compare(c1.getMaxPassengers(), c2.getMaxPassengers()));
+        System.out.println("\nSorted List");
+        for (Car c : availableCars) {
+            System.out.println(c.getMaxPassengers() + " " + c.isSharable());
         }
 
         // If sharing is selected, cars that are sharable can be considered

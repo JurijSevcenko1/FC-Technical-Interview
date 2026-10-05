@@ -26,7 +26,7 @@ public class Car {
         this.currentPassengers = currentPassengers;
     }
 
-    public boolean isIsAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 
@@ -34,7 +34,7 @@ public class Car {
         this.isAvailable = isAvailable;
     }
 
-    public boolean isIsSharable() {
+    public boolean isSharable() {
         return isSharable;
     }
 
