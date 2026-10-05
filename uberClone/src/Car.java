@@ -10,6 +10,7 @@ public class Car {
     private int currentPassengers = 0;
     private boolean isAvailable = true;
     private boolean isSharable = false;
+    private boolean currentlySharable = isSharable;
     private List<HashMap<String, Integer>> passengerList = new ArrayList<>();
 
     public Car(int maxPassengers, boolean isSharable, boolean isAvailable) {
@@ -40,6 +41,14 @@ public class Car {
 
     public void setIsSharable(boolean isSharable) {
         this.isSharable = isSharable;
+    }
+
+    public boolean isCurrentlySharable() {
+        return isCurrentlySharable();
+    }
+
+    public void setIsCurrentlySharable(boolean isCurrentlySharable) {
+        this.currentlySharable = isCurrentlySharable;
     }
 
     public List<HashMap<String, Integer>> getPassengerList() {

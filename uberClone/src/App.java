@@ -27,36 +27,47 @@ public class App {
         }
 
         // Take a Booking request - Attain user input with input validation
+        boolean addAnother = true;
         Scanner scanner = new Scanner(System.in);
-        int passengers = 0;
-        while (passengers == 0) {
-            System.out.print("How many people is the booking for? (up to 6) : ");
-            int inputPassengers = Integer.parseInt(scanner.nextLine());
-            if (inputPassengers > 0 && inputPassengers <= 6) {
-                passengers = inputPassengers;
-            } else {
-                System.out.println("Please provide a number between 1 and 6.");
+
+        while (addAnother) {
+            int passengers = 0;
+            while (passengers == 0) {
+                System.out.print("How many people is the booking for? (up to 6) : ");
+                int inputPassengers = Integer.parseInt(scanner.nextLine());
+                if (inputPassengers > 0 && inputPassengers <= 6) {
+                    passengers = inputPassengers;
+                } else {
+                    System.out.println("Please provide a number between 1 and 6.");
+                }
+            }
+
+            System.out.print("Are you happy with sharing the ride? (y/n) : ");
+            boolean isSharingSet = false;
+            boolean isSharing = false;
+            while (!isSharingSet) {
+                String sharing = scanner.nextLine();
+
+                if (sharing.toLowerCase().compareTo("y") == 0 || sharing.toLowerCase().compareTo("yes") == 0) {
+                    isSharing = true;
+                    isSharingSet = true;
+                } else if (sharing.toLowerCase().compareTo("n") == 0 || sharing.toLowerCase().compareTo("no") == 0) {
+                    isSharing = false;
+                    isSharingSet = true;
+                } else {
+                    System.out.println("Please provide your answer as a single character 'y' or 'n'.");
+                }
+            }
+
+            System.out.println(bookCar(passengers, isSharing, carList));
+
+            System.out.println("Would you like to add another booking?");
+            String addAnotherCheck = scanner.nextLine();
+            if (addAnotherCheck.toLowerCase().compareTo("n") == 0
+                    || addAnotherCheck.toLowerCase().compareTo("no") == 0) {
+                addAnother = false;
             }
         }
-
-        System.out.print("Are you happy with sharing the ride? (y/n) : ");
-        boolean isSharingSet = false;
-        boolean isSharing = false;
-        while (!isSharingSet) {
-            String sharing = scanner.nextLine();
-
-            if (sharing.toLowerCase().compareTo("y") == 0 || sharing.toLowerCase().compareTo("yes") == 0) {
-                isSharing = true;
-                isSharingSet = true;
-            } else if (sharing.toLowerCase().compareTo("n") == 0 || sharing.toLowerCase().compareTo("no") == 0) {
-                isSharing = false;
-                isSharingSet = true;
-            } else {
-                System.out.println("Please provide your answer as a single character 'y' or 'n'.");
-            }
-        }
-
-        System.out.println(bookCar(passengers, isSharing, carList));
 
         for (Car c : carList) {
             System.out.println(c.getID() +
@@ -84,7 +95,7 @@ public class App {
         for (Car c : cars) {
             // If sharing is selected, cars that are sharable can be considered
             if ((c.isAvailable() == true) &&
-                    ((sharing) || (!sharing && c.isSharable() == false)) &&
+                    ((sharing) || (!sharing && c.isCurrentlySharable() == false)) &&
                     (c.getMaxPassengers() - c.getCurrentPassengers() >= passengers)) {
                 availableCars.add(c);
             }
@@ -106,16 +117,14 @@ public class App {
 
         // Search for most suitable car - assign the car with least number of passengers
         // that fills the user request.
-        for (Car c : availableCars) {
-
-        }
 
         Car car = availableCars.get(0);
 
         System.out.println("\nCar (Before): " + car.getID() +
                 ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
                 "\npassenger list: " + car.getPassengerList() +
-                "\navailable: " + car.isAvailable());
+                "\navailable: " + car.isAvailable() +
+                "\nsharable: " + car.isAvailable());
 
         availableCars.get(0).setCurrentPassengers(car.getCurrentPassengers() + passengers);
         HashMap<String, Integer> passengerInfo = new HashMap<String, Integer>();
@@ -127,6 +136,7 @@ public class App {
 
         if (!sharing) {
             availableCars.get(0).setIsAvailable(false);
+            availableCars.get(0).setIsCurrentlySharable(false);
         }
 
         if (availableCars.get(0).getMaxPassengers() - availableCars.get(0).getCurrentPassengers() == 0) {
@@ -140,6 +150,7 @@ public class App {
         return ("\nCar (After): " + car.getID() +
                 ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
                 "\npassenger list: " + car.getPassengerList() +
-                "\navailable: " + car.isAvailable());
+                "\navailable: " + car.isAvailable() +
+                "\nsharable: " + car.isAvailable());
     }
 }
