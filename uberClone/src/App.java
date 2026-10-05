@@ -57,10 +57,16 @@ public class App {
 
     static void bookCar(int passengers, boolean sharing) {
         // Process user input and find a suitable car from the list of cars
-        System.out.println("p, s:" + passengers + ", " + sharing);
-
-        // Check whether input number of passengers is less than or equal to 6 - if not
-        // throw error.
+        try {
+            // Check whether input number of passengers is less than or equal to 6 - if not
+            // throw error - added redundancy in plan for API handling later on - user input
+            // cannot be trusted.
+            if (passengers >= 6 || passengers <= 0) {
+                throw new ArithmeticException("Invalid number of passengers provided");
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
 
         // If sharing is selected, cars that are sharable can be considered
 
