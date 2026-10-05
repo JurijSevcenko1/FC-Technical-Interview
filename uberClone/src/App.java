@@ -57,6 +57,14 @@ public class App {
         }
 
         System.out.println(bookCar(passengers, isSharing, carList));
+
+        for (Car c : carList) {
+            System.out.println(c.getID() +
+                    ", passengers: " + c.getCurrentPassengers() + "/" + c.getMaxPassengers() +
+                    ", passenger list: " + c.getPassengerList() +
+                    ", available: " + c.isAvailable() +
+                    ", sharable: " + c.isSharable());
+        }
     }
 
     static String bookCar(int passengers, boolean sharing, List<Car> cars) {
