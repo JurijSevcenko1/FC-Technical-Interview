@@ -10,13 +10,12 @@ public class Car {
     private int currentPassengers = 0;
     private boolean isAvailable = true;
     private boolean isSharable = false;
-    private List<HashMap<String, Integer>> passengerList;
+    private List<HashMap<String, Integer>> passengerList = new ArrayList<>();
 
-    public Car(int maxPassengers, boolean isSharable, boolean isAvailable, ArrayList<HashMap<String, Integer>> passengerList) {
+    public Car(int maxPassengers, boolean isSharable, boolean isAvailable) {
         this.maxPassengers = maxPassengers;
         this.isSharable = isSharable;
         this.isAvailable = isAvailable;
-        this.passengerList = passengerList;
     }
 
     public int getCurrentPassengers() {
@@ -49,5 +48,13 @@ public class Car {
 
     public void setPassengerList(List<HashMap<String, Integer>> passengerList) {
         this.passengerList = passengerList;
+    }
+
+    public int getMaxPassengers() {
+        return maxPassengers;
+    }
+
+    public String getID() {
+        return ID;
     }
 }
