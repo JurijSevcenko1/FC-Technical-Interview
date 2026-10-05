@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -53,16 +55,17 @@ public class App {
                 System.out.println("Please provide your answer as a single character 'y' or 'n'.");
             }
         }
-        bookCar(passengers, isSharing, carList);
+
+        System.out.println(bookCar(passengers, isSharing, carList));
     }
 
-    static void bookCar(int passengers, boolean sharing, List<Car> cars) {
+    static String bookCar(int passengers, boolean sharing, List<Car> cars) {
         // Process user input and find a suitable car from the list of cars
         try {
             // Check whether input number of passengers is less than or equal to 6 - if not
             // throw error - added redundancy in plan for API handling later on - user input
             // cannot be trusted.
-            if (passengers >= 6 || passengers <= 0) {
+            if (passengers > 6 || passengers <= 0) {
                 throw new ArithmeticException("Invalid number of passengers provided");
             }
         } catch (Exception e) {
@@ -71,6 +74,7 @@ public class App {
 
         List<Car> availableCars = new ArrayList<>();
         for (Car c : cars) {
+            // If sharing is selected, cars that are sharable can be considered
             if ((c.isAvailable() == true) &&
                     ((sharing) || (!sharing && c.isSharable() == false)) &&
                     (c.getMaxPassengers() - c.getCurrentPassengers() >= passengers)) {
@@ -78,26 +82,56 @@ public class App {
             }
         }
 
-        System.out.println("Original List");
-        for (Car c : availableCars) {
-            System.out.println(c.getMaxPassengers() + " " + c.isSharable());
-        }
-        Collections.sort(availableCars, (c1, c2) -> Integer.compare(c1.getMaxPassengers(), c2.getMaxPassengers()));
-        System.out.println("\nSorted List");
-        for (Car c : availableCars) {
-            System.out.println(c.getMaxPassengers() + " " + c.isSharable());
-        }
-
-        // If sharing is selected, cars that are sharable can be considered
-
+        // System.out.println("Original List");
+        // for (Car c : availableCars) {
+        // System.out.println(c.getMaxPassengers() + " " + c.isSharable());
+        // }
         // Sort the list of available cars based on the number of current passengers in
         // ascending order.
 
+        Collections.sort(availableCars, (c1, c2) -> Integer.compare(c1.getMaxPassengers(), c2.getMaxPassengers()));
+
+        // System.out.println("\nSorted List");
+        // for (Car c : availableCars) {
+        // System.out.println(c.getMaxPassengers() + " " + c.isSharable());
+        // }
+
         // Search for most suitable car - assign the car with least number of passengers
         // that fills the user request.
+        for (Car c : availableCars) {
+
+        }
+
+        Car car = availableCars.get(0);
+
+        System.out.println("\nCar (Before): " + car.getID() +
+                ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
+                "\npassenger list: " + car.getPassengerList() +
+                "\navailable: " + car.isAvailable());
+
+        availableCars.get(0).setCurrentPassengers(car.getCurrentPassengers() + passengers);
+        HashMap<String, Integer> passengerInfo = new HashMap<String, Integer>();
+        passengerInfo.put(UUID.randomUUID().toString(), passengers);
+        List<HashMap<String, Integer>> updatedPassengerInfo = car.getPassengerList();
+        updatedPassengerInfo.add(passengerInfo);
+
+        availableCars.get(0).setPassengerList(updatedPassengerInfo);
+
+        if (!sharing) {
+            availableCars.get(0).setIsAvailable(false);
+        }
+
+        if (availableCars.get(0).getMaxPassengers() - availableCars.get(0).getCurrentPassengers() == 0) {
+            availableCars.get(0).setIsAvailable(false);
+        }
 
         // If a suitable car is found, update the car's currentPassengers and
         // passengerList accordingly
         // Return the car's ID.
+        car = availableCars.get(0);
+        return ("\nCar (After): " + car.getID() +
+                ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
+                "\npassenger list: " + car.getPassengerList() +
+                "\navailable: " + car.isAvailable());
     }
 }
