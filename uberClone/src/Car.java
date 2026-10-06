@@ -17,6 +17,7 @@ public class Car {
         this.maxPassengers = maxPassengers;
         this.isSharable = isSharable;
         this.isAvailable = isAvailable;
+        this.currentlySharable = isSharable;
     }
 
     public int getCurrentPassengers() {
@@ -41,10 +42,11 @@ public class Car {
 
     public void setIsSharable(boolean isSharable) {
         this.isSharable = isSharable;
+        this.currentlySharable = isSharable;
     }
 
     public boolean isCurrentlySharable() {
-        return isCurrentlySharable();
+        return currentlySharable;
     }
 
     public void setIsCurrentlySharable(boolean isCurrentlySharable) {
