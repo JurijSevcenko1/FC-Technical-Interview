@@ -1,12 +1,9 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class AppTest {
@@ -22,6 +19,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should provide a UUID of the car when booked")
     public void bookCarTest() {
         Car car = cars.get(0);
 
@@ -40,6 +38,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should throw an exception and output message to user that is trying to book for too many people")
     public void bookForTooManyPassengers() {
         // This tests that an exception is thrown if too many passengers are provided
         String booking = App.bookCar(7, false, cars);
@@ -49,6 +48,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should provide an exception if there are no cars available")
     public void carsUnavailable() {
         // This tests that an exception is thrown if too many passengers are provided
         cars.clear();
@@ -61,6 +61,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should provide the correct size car for the number of passengers")
     public void bookLargeCarTest() {
         // This tests that the method picks the correct car
         Car car = new Car(6, false, true);
@@ -71,6 +72,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should allow a user to book any car and change it to non sharable if it was sharable")
     public void bookCarNonSharingUser() {
         cars.clear();
         Car car = new Car(3, true, true);
@@ -84,6 +86,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Tests multiple non-sharing users booking cars, none should be pooled")
     public void bookCarNonSharingUsers() {
         cars.clear();
         Car car1 = new Car(3, true, true);
@@ -109,6 +112,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Should allow a user to book any car and doesn't change the car to unavailable to sharing users")
     public void bookCarSharingUser() {
         cars.clear();
         Car car = new Car(3, true, true);
@@ -124,6 +128,7 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Tests multiple sharing users booking cars, some should be pooled")
     public void bookCarSharingUsers() {
         // This tests whether sharing users will be correctly placed into sharable cars
         // and what the status of these cars will be
@@ -153,6 +158,42 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("Tests multiple sharing users booking cars, some should be pooled, but those who are not sharing shouldn't be pooled")
+    public void bookCarSharingAndNonSharingUsers() {
+        // This tests whether sharing users will be correctly placed into sharable cars
+        // and what the status of these cars will be
+        cars.clear();
+        Car car1 = new Car(3, true, true);
+        cars.add(car1);
+        Car car2 = new Car(4, true, true);
+        cars.add(car2);
+        cars.add(new Car(5, false, true));
+        Car car3 = new Car(3, false, true);
+        cars.add(car3);
+
+        String booking1 = App.bookCar(1, true, cars);
+        assertEquals(car1.getID(), booking1.substring(booking1.indexOf(":") + 1, booking1.indexOf("\npas")).strip());
+        assertEquals(cars.get(cars.indexOf(car1)).isCurrentlySharable(), true);
+        assertEquals(cars.get(cars.indexOf(car1)).isAvailable(), true);
+
+        String booking2 = App.bookCar(2, false, cars);
+        assertEquals(car3.getID(), booking2.substring(booking2.indexOf(":") + 1, booking2.indexOf("\npas")).strip());
+        assertEquals(cars.get(cars.indexOf(car3)).isCurrentlySharable(), false);
+        assertEquals(cars.get(cars.indexOf(car3)).isAvailable(), false);
+
+        String booking3 = App.bookCar(4, true, cars);
+        assertEquals(car2.getID(), booking3.substring(booking3.indexOf(":") + 1, booking3.indexOf("\npas")).strip());
+        assertEquals(cars.get(cars.indexOf(car2)).isCurrentlySharable(), false);
+        assertEquals(cars.get(cars.indexOf(car2)).isAvailable(), false);
+
+        String booking4 = App.bookCar(2, true, cars);
+        assertEquals(car1.getID(), booking4.substring(booking4.indexOf(":") + 1, booking4.indexOf("\npas")).strip());
+        assertEquals(cars.get(cars.indexOf(car1)).isCurrentlySharable(), false);
+        assertEquals(cars.get(cars.indexOf(car1)).isAvailable(), false);
+    }
+
+    @Test
+    @DisplayName("Tests that the passengers list is correctly updated")
     public void multiBookCar() {
         // Detailed test of shared booking
         Car car = cars.get(0);
