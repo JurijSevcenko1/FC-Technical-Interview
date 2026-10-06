@@ -1,7 +1,11 @@
 This is a mini project (Uber clone) for a technical interview.
 
-# Problem Statement:
+# Uber Clone - Technical Interview
+
+#### Problem Statement
 Create an Uber clone onboarding/booking for a lead passenger user.
+
+#### Assumptions
 The user is able to outline how many passengers the Uber car is meant for when booking.
 
 There are many cars available:
