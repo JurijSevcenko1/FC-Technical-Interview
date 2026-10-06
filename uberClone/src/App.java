@@ -69,6 +69,8 @@ public class App {
             }
         }
 
+        scanner.close();
+
         for (Car c : carList) {
             System.out.println(c.getID() +
                     ", passengers: " + c.getCurrentPassengers() + "/" + c.getMaxPassengers() +
