@@ -90,7 +90,7 @@ public class App {
                 throw new ArithmeticException("Invalid number of passengers provided");
             }
         } catch (Exception e) {
-            System.out.print(e.getMessage());
+            return e.getMessage();
         }
 
         List<Car> availableCars = new ArrayList<>();
@@ -126,7 +126,7 @@ public class App {
                 ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
                 "\npassenger list: " + car.getPassengerList() +
                 "\navailable: " + car.isAvailable() +
-                "\nsharable: " + car.isAvailable());
+                "\nsharable: " + car.isCurrentlySharable());
 
         availableCars.get(0).setCurrentPassengers(car.getCurrentPassengers() + passengers);
         HashMap<String, Integer> passengerInfo = new HashMap<String, Integer>();
@@ -143,16 +143,17 @@ public class App {
 
         if (availableCars.get(0).getMaxPassengers() - availableCars.get(0).getCurrentPassengers() == 0) {
             availableCars.get(0).setIsAvailable(false);
+            availableCars.get(0).setIsCurrentlySharable(false);
         }
 
         // If a suitable car is found, update the car's currentPassengers and
         // passengerList accordingly
         // Return the car's ID.
         car = availableCars.get(0);
-        return ("\nCar (After): " + car.getID() +
-                ",\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
+        return ("\nCar: " + car.getID() +
+                "\npassengers: " + car.getCurrentPassengers() + "/" + car.getMaxPassengers() +
                 "\npassenger list: " + car.getPassengerList() +
                 "\navailable: " + car.isAvailable() +
-                "\nsharable: " + car.isAvailable());
+                "\nsharable: " + car.isCurrentlySharable());
     }
 }
