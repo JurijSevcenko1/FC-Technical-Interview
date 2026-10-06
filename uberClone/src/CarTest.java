@@ -47,6 +47,8 @@ public class CarTest {
 
     @Test
     public void setIsSharable() {
+        // This should impact whether the car is not only sharable in general but also
+        // at that excat moment
         Car car = new Car(5, true, true);
         assertEquals(car.isSharable(), true);
         assertEquals(car.isCurrentlySharable(), true);
