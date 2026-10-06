@@ -97,10 +97,17 @@ public class App {
         for (Car c : cars) {
             // If sharing is selected, cars that are sharable can be considered
             if ((c.isAvailable() == true) &&
-                    ((sharing) || (!sharing && c.isCurrentlySharable() == false)) &&
                     (c.getMaxPassengers() - c.getCurrentPassengers() >= passengers)) {
-                availableCars.add(c);
+                if (!sharing && c.getCurrentPassengers() == 0) {
+                    availableCars.add(c);
+                } else if (sharing && c.isCurrentlySharable()) {
+                    availableCars.add(c);
+                }
             }
+        }
+
+        if (availableCars.size() == 0) {
+            return "No cars currently available";
         }
 
         // System.out.println("Original List");
